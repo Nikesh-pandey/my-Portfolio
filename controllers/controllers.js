@@ -8,12 +8,12 @@ const allowedAdminEmails = [
   "khildwhoj.pandey027@gmail.com",
   "pandeynikesh54@gmail.com"
 ];
-
 // Admin registration
 exports.postAdmindata = async (req, res) => {
   try {
     const { email } = req.body;
-
+console.log("Request body is:", req.body);
+//if the request sent in the body  isnot matched with allowedAdminEmails then throw error
     if (!allowedAdminEmails.includes(email)) {
       return res.status(403).json({ message: "Access denied: email not authorized" });
     }
@@ -35,6 +35,7 @@ exports.postAdmindata = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Admin login
 exports.login = async (req, res) => {
@@ -75,3 +76,5 @@ exports.uploadImage = (req, res) => {
 exports.editProject = (req, res) => {
   res.send(`Editing project with ID: ${req.params.id}`);
 };
+
+

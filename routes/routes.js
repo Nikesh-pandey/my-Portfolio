@@ -4,7 +4,7 @@ const controller= require('../controllers/controllers');
 const authMiddleware = require('../middleware/authMiddleware');
 
 router.post('/Register',controller.postAdmindata);
-router.post('/auth/login', controller.login);
+router.get('/auth/login', controller.login);
 router.post('/admin/upload-image', authMiddleware, controller.uploadImage);
 router.put('/admin/edit-project/:id', authMiddleware, controller.editProject);
 module.exports=router;
