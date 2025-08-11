@@ -1,26 +1,29 @@
-  const express = require('express');
-  const app = express();
-  const mongoose = require('mongoose');
-  require('dotenv').config();
-  const PORT = process.env.PORT || 3000;
-  // Middleware
-  app.use(express.json());
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-  // Routes
-  const Adminroute = require('./routes/routes');
-  app.use('/auth', Adminroute);
-  app.use('/', Adminroute);
-  app.use('/api', Adminroute);
+const PORT = process.env.PORT || 3000;
 
-  // DB connection
-  mongoose.connect(process.env.MONGO_URL)
-    .then(() => {
-      console.log("Database connected successfully");
-      app.listen(PORT, () => {
-        console.log("The server has started at port", PORT);
-      });
-    })
-    .catch((err) => {
-      console.log("An error occurred while connecting to DB:", err);
-    });
+// Middleware to parse JSON bodies
+app.use(express.json());
 
+// Import your routes
+const Adminroute = require('./routes/routes');
+
+// Mount routes at /api
+app.use('/api', Adminroute);
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URL,)
+.then(() => {
+  console.log("Database connected successfully");
+
+  // Start server after DB connection is successful
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+})
+.catch((err) => {
+  console.error("Error connecting to DB:", err);
+});

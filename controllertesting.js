@@ -1,4 +1,4 @@
-const Admin= require('./models/model');
+const Admin= require('./models/adminmodel');
 module.exports= async(req,res)=>{
 
 const Allowedemails=[

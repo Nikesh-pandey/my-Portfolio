@@ -1,7 +1,7 @@
-const Admin = require('../models/model');
+const Admin = require('../models/adminmodel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+const ImageData=require('../models/imagemodule')
 const JWT_SECRET = process.env.JWT_SECRET; // Make sure this is set in your .env file
 
 const allowedAdminEmails = [
@@ -70,9 +70,43 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-exports.uploadImage = (req, res) => {
-  res.send('Upload image works!');
-};
+
+exports.uploadImage=async(req,res)=>{
+  try{
+const reqFile= req.file;
+console.log("image",req.file);
+if(!reqFile){
+  return res.status(400).json({message:"No any file is uploaded"});
+}
+const {filename,path,mimetype,size}= req.file;
+const validimage= new ImageData({filename,path,mimetype,size});
+const Dbstoreimg= await validimage.save();
+if(!Dbstoreimg){
+  return res.status(404).json({message:"file didnot matched"});
+}
+return res.status(200).json({ message: "file uploaded successfully", image: Dbstoreimg });
+}
+catch(err){
+  return res.status(503).json({error:err.message});
+  
+}
+}
+
+
+// exports.uploadImage = (req, res) => {
+
+//   const imageFiles= req.file;
+//   if(!imageFiles){
+//     return res.status(404).json({message:"file missing"});
+//   }
+//   const {filename,path,mimetype,size}= req.file;
+//   const imgfiles= new ImageData({filename,path,mimetype,size});
+//   const dbimg= imgfiles.save();
+//   if(!dbimg){
+//     return res.status(404).json({message:"no any file found on database"})
+//   }
+
+// };
 exports.editProject = (req, res) => {
   res.send(`Editing project with ID: ${req.params.id}`);
 };
